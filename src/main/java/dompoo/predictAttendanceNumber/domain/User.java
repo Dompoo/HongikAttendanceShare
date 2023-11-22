@@ -22,9 +22,12 @@ public class User {
 
     private String password;
 
+    private int point;
+
     @Builder
     public User(String username, String password) {
         this.username = username;
         this.password = password;
+        point = 5;
     }
 }
