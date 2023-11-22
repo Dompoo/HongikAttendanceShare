@@ -2,6 +2,7 @@ package dompoo.predictAttendanceNumber.controller;
 
 import dompoo.predictAttendanceNumber.request.NumberCreateRequest;
 import dompoo.predictAttendanceNumber.request.NumberSearchRequest;
+import dompoo.predictAttendanceNumber.response.NumberResponse;
 import dompoo.predictAttendanceNumber.service.NumberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -16,7 +17,7 @@ public class NumberController {
     private final NumberService numberService;
 
     @GetMapping("/attnumber")
-    public int getNumber(@RequestBody NumberSearchRequest request) {
+    public NumberResponse getNumber(@RequestBody NumberSearchRequest request) {
         return numberService.getNumber(request);
     }
 

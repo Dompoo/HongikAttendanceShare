@@ -20,8 +20,11 @@ public class Number {
 
     private int number;
 
+    private String classNum;
+
     @Builder
-    public Number(int number) {
+    public Number(int number, String classNum) {
         this.number = number;
+        this.classNum = classNum;
     }
 }
