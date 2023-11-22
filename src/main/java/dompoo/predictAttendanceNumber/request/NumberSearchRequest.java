@@ -1,5 +1,6 @@
 package dompoo.predictAttendanceNumber.request;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,6 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class NumberSearchRequest {
 
+    @NotNull
     private String classNum;
 
     public NumberSearchRequest(String classNum) {
