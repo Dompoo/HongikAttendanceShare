@@ -9,6 +9,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -22,9 +24,12 @@ public class Number {
 
     private String classNum;
 
+    private LocalDateTime addTime;
+
     @Builder
-    public Number(int number, String classNum) {
+    public Number(int number, String classNum, LocalDateTime addTime) {
         this.number = number;
         this.classNum = classNum;
+        this.addTime = addTime;
     }
 }
