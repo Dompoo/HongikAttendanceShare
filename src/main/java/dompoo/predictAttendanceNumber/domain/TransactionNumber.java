@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class OneHourNumber {
+public class TransactionNumber {
 
     @Id
     @GeneratedValue
@@ -22,7 +22,7 @@ public class OneHourNumber {
     private String classNum;
 
     @Builder
-    public OneHourNumber(int number, String classNum) {
+    public TransactionNumber(int number, String classNum) {
         this.number = number;
         this.classNum = classNum;
     }
