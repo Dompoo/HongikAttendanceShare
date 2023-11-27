@@ -1,5 +1,6 @@
 package dompoo.predictAttendanceNumber.response;
 
+import dompoo.predictAttendanceNumber.domain.Number;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,4 +23,11 @@ public class NumberResponse {
         this.number = number;
         this.classNum = classNum;
     }
+
+    public NumberResponse(Number number) {
+        this.id = number.getId();
+        this.number = number.getNumber();
+        this.classNum = number.getClassNum();
+    }
+
 }

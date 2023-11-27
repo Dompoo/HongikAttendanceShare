@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 public class NumberController {
@@ -20,6 +22,11 @@ public class NumberController {
     @GetMapping("/attnumber")
     public NumberResponse getNumber(@RequestBody @Valid NumberSearchRequest request) {
         return numberService.getNumber(request);
+    }
+
+    @GetMapping("/attnumber/transaction")
+    public List<NumberResponse> getTransactionNumber(@RequestBody @Valid NumberSearchRequest request) {
+        return numberService.getTransactionNumber(request);
     }
 
     @PostMapping("/attnumber")

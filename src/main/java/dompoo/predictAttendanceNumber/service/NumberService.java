@@ -4,7 +4,6 @@ import dompoo.predictAttendanceNumber.domain.Number;
 import dompoo.predictAttendanceNumber.exception.number.NumberNotFound;
 import dompoo.predictAttendanceNumber.repository.NumberRepository;
 import dompoo.predictAttendanceNumber.repository.TransactionRepository;
-import dompoo.predictAttendanceNumber.repository.UserRepository;
 import dompoo.predictAttendanceNumber.request.NumberCreateRequest;
 import dompoo.predictAttendanceNumber.request.NumberSearchRequest;
 import dompoo.predictAttendanceNumber.response.NumberResponse;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,26 +20,14 @@ public class NumberService {
 
     private final NumberRepository numberRepository;
     private final TransactionRepository transactionRepository;
-    private final UserRepository userRepository;
 
     /**
-     * 먼저 Transaction 레포지토리에서 원하는 출결번호가 있는지 검색한다. (최신정보)
-     * Transaction 레포지토리에 값이 있다면 리턴하고,
-     * 만약 없다면, Number 레포지토리에서 원하는 출결번호를 검색한다. (사용자가 Refresh 했을 경우)
+     * Number 레포지토리에서 원하는 출결번호가 있는지 찾고 리턴한다. (확정정보)
      */
     public NumberResponse getNumber(NumberSearchRequest request) {
-        Number findNumber;
-
-        // 1시간 레포지토리에 같은 수업의 정보가 있는지 검색
-        Optional<Number> transactionNumber = transactionRepository.findByClassNum(request.getClassNum());
-
-        if (transactionNumber.isPresent()) {
-            findNumber = transactionNumber.get();
-        } else {
-            // 영구 레포지토리에 같은 수업의 정보가 있는지 검색
-            findNumber = numberRepository.findByClassNum(request.getClassNum())
-                    .orElseThrow(NumberNotFound::new);
-        }
+        // 확정된 레포지토리에 같은 수업의 정보가 있는지 검색
+        Number findNumber = numberRepository.findByClassNum(request.getClassNum())
+                .orElseThrow(NumberNotFound::new);
 
         return NumberResponse.builder()
                 .id(findNumber.getId())
@@ -51,8 +37,19 @@ public class NumberService {
     }
 
     /**
+     * Number 레포지토리의 값이 틀렸다면 Transaction 레포지토리의 값으로 시도해볼 수 있다.
+     */
+    public List<NumberResponse> getTransactionNumber(NumberSearchRequest request) {
+        // 비확정 레포지토리에 같은 수업의 정보가 있는지 검색
+        List<Number> findNumbers = transactionRepository.findByClassNum(request.getClassNum());
+
+        return findNumbers.stream()
+                .map(NumberResponse::new).toList();
+    }
+
+    /**
      * request의 정보를 받아 Number 객체로
-     * Transaction 레포지토리에 저장합니다.
+     * Transaction 레포지토리에 저장한다.
      */
     public void createNumber(NumberCreateRequest request) {
         transactionRepository.save(Number.builder()
@@ -84,8 +81,8 @@ public class NumberService {
     }
 
     /**
-     * Number 레포지토리를 전체 조회하며 24시간이 지난 출결번호를 삭제합니다.
-     * 즉, 의미없는 정보를 삭제합니다.
+     * Number 레포지토리를 전체 조회하며 24시간이 지난 출결번호를 삭제한다.
+     * 즉, 의미없는 정보를 삭제한다.
      */
     public void numberRefresh() {
         //TODO 최적화 방법 찾기
@@ -105,7 +102,7 @@ public class NumberService {
     }
 
     /**
-     * Transaction 레포지토리를 비웁니다.
+     * Transaction 레포지토리를 비운다.
      */
     public void emptyTransaction() {
         transactionRepository.deleteAll();
