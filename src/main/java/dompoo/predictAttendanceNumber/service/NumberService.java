@@ -8,6 +8,7 @@ import dompoo.predictAttendanceNumber.request.NumberCreateRequest;
 import dompoo.predictAttendanceNumber.request.NumberSearchRequest;
 import dompoo.predictAttendanceNumber.response.NumberResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -81,20 +82,21 @@ public class NumberService {
     }
 
     /**
-     * Number 레포지토리를 전체 조회하며 24시간이 지난 출결번호를 삭제한다.
+     * Number 레포지토리를 전체 조회하며 등록된지 30분이 지난 출결번호를 삭제한다.
      * 즉, 의미없는 정보를 삭제한다.
      */
+    @Scheduled(cron = "0 */30 * * * *") // 30분마다 실행
     public void numberRefresh() {
         //TODO 최적화 방법 찾기
         List<Number> numberList = numberRepository.findAll();
         //현재 날짜
-        LocalDateTime now = LocalDateTime.now().truncatedTo(ChronoUnit.DAYS);
+        LocalDateTime now = LocalDateTime.now().truncatedTo(ChronoUnit.HOURS);
 
         for (Number number : numberList) {
             //Number 객체 등록 날짜
-            LocalDateTime addTime = number.getAddTime().truncatedTo(ChronoUnit.DAYS);
+            LocalDateTime addTime = number.getAddTime().truncatedTo(ChronoUnit.HOURS);
 
-            // 24시간이 지났다면 레포지토리에서 삭제
+            // 1시간이 지났다면 레포지토리에서 삭제
             if (now.compareTo(addTime) >= 1) {
                 numberRepository.delete(number);
             }
@@ -104,7 +106,9 @@ public class NumberService {
     /**
      * Transaction 레포지토리를 비운다.
      */
+    @Scheduled(cron = "0 30 * * * *") // 매시간 30분에 실행
     public void emptyTransaction() {
+        transactionRefresh();
         transactionRepository.deleteAll();
     }
 }
