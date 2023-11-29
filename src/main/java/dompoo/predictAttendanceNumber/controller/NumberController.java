@@ -8,9 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -18,9 +16,9 @@ public class NumberController {
 
     private final NumberService numberService;
 
-    @GetMapping("/attnumber")
-    public String getNumber(Model model, @RequestBody @Valid NumberSearchRequest request) {
-        NumberResponse findNumber = numberService.getNumber(request);
+    @PostMapping("/attnumber/find")
+    public String getNumber(Model model, @RequestParam String classNum) {
+        NumberResponse findNumber = numberService.getNumber(new NumberSearchRequest(classNum));
         model.addAttribute("findNumber", findNumber);
         return "display_number";
     }
