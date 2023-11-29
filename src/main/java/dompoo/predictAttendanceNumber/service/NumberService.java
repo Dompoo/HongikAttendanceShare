@@ -1,7 +1,6 @@
 package dompoo.predictAttendanceNumber.service;
 
 import dompoo.predictAttendanceNumber.domain.Number;
-import dompoo.predictAttendanceNumber.exception.number.NumberNotFound;
 import dompoo.predictAttendanceNumber.repository.NumberRepository;
 import dompoo.predictAttendanceNumber.repository.TransactionRepository;
 import dompoo.predictAttendanceNumber.request.NumberCreateRequest;
@@ -14,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,13 +28,19 @@ public class NumberService {
     public NumberResponse getNumber(NumberSearchRequest request) {
         // 확정된 레포지토리에 같은 수업의 정보가 있는지 검색
         Number findNumber = numberRepository.findByClassNum(request.getClassNum())
-                .orElseThrow(NumberNotFound::new);
+                .orElseThrow();
 
         return NumberResponse.builder()
                 .id(findNumber.getId())
                 .number(findNumber.getNumber())
                 .classNum(findNumber.getClassNum())
                 .build();
+    }
+
+    public Boolean isPresent(String classNum) {
+        // 확정된 레포지토리에 같은 수업의 정보가 있는지 검색
+        Optional<Number> findNumber = numberRepository.findByClassNum(classNum);
+        return findNumber.isPresent();
     }
 
     /**
