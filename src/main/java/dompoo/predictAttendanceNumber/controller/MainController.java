@@ -13,7 +13,12 @@ public class MainController {
 
     @GetMapping("/")
     public String root() {
-        return "redirect:/main";
+        return "redirect:/menu";
+    }
+
+    @GetMapping("/menu")
+    public String main() {
+        return "main";
     }
 
     @GetMapping("/getNumber")
