@@ -4,3 +4,11 @@
 출결번호 검색 버튼
 출결번호 등록 버튼
  -->
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">
+    <table class="table">
+        <a th:href="@{/getNumber}" class="btn btn-primary">출결번호 검색</a>
+        <a th:href="@{/setNumber}" class="btn btn-primary">출결번호 등록</a>
+    </table>
+</div>
+</html>

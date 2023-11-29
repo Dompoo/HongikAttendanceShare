@@ -6,3 +6,26 @@
 실패 -> 새로고침 후 다시 검색하기 버튼
 메인으로 버튼
 -->
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">
+    <table class="table">
+        <div>새로고침버튼</div>
+
+        <div th:if="${!findNumber}">
+            <h1>출결번호 검색 성공</h1>
+            <div th:text="${findNumber.getClassNum()}"></div>
+            <div th:text="${findNumber.getNumber()}"></div>
+        </div>
+        <div th:if="${findNumber.isEmpty()}">
+            <h1>출결번호 검색 실패</h1>
+            <!--    새로고침 후 다시 검색하기 버튼-->
+        </div>
+        <div>
+            <!--    메인으로 버튼-->
+        </div>
+    </table>
+</div>
+</html>
+
+
+
