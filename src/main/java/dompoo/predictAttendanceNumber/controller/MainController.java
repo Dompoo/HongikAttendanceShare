@@ -16,6 +16,16 @@ public class MainController {
         return "redirect:/main";
     }
 
+    @GetMapping("/getNumber")
+    public String numberGet() {
+        return "find_number_form";
+    }
+
+    @GetMapping("/setNumber")
+    public String numberSet() {
+        return "register_number_form";
+    }
+
     @GetMapping("/refresh")
     public void refreshByUser() {
         numberService.transactionRefresh();
