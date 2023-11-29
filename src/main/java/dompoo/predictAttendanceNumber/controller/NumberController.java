@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.List;
-
 @Controller
 @RequiredArgsConstructor
 public class NumberController {
@@ -27,10 +25,11 @@ public class NumberController {
         return "display_number";
     }
 
-    @GetMapping("/attnumber/transaction")
-    public String getTransactionNumber(Model model, @RequestBody @Valid NumberSearchRequest request) {
-        List<NumberResponse> findNumbers = numberService.getTransactionNumber(request);
-        model.addAttribute("findNumber", findNumbers);
+    @GetMapping("/attnumber/retry")
+    public String getNumberRefresh(Model model, @RequestBody @Valid NumberSearchRequest request) {
+        numberService.transactionRefresh();
+        NumberResponse findNumber = numberService.getNumber(request);
+        model.addAttribute("findNumber", findNumber);
         return "display_number";
     }
 
