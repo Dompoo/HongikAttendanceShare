@@ -31,17 +31,7 @@ public class PredictAttendanceNumberApplication {
 					.classNum("1")
 					.addTime(LocalDateTime.now())
 					.build());
-			transactionRepository.save(Number.builder()
-					.number(1234)
-					.classNum("1")
-					.addTime(LocalDateTime.now())
-					.build());
 			numberRepository.save(Number.builder()
-					.number(5678)
-					.classNum("2")
-					.addTime(LocalDateTime.now())
-					.build());
-			transactionRepository.save(Number.builder()
 					.number(5678)
 					.classNum("2")
 					.addTime(LocalDateTime.now())
