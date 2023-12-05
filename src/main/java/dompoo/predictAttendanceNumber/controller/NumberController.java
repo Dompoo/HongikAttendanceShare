@@ -9,10 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
@@ -22,31 +20,31 @@ public class NumberController {
     private final NumberService numberService;
 
     @PostMapping("/attnumber/find")
-    public String getNumber(Model model, @RequestParam String classNum) {
-//        if (!numberService.isPresent(classNum)) {
-//            result.rejectValue("class number", "NO_NUMBER", "일치하는 출결번호가 없습니다.");
-//            model.addAttribute("classNum", classNum);
-//            return "display_number";
-//        }
-        log.info("출결번호 검색, 학수번호 : {}", classNum);
+    public String getNumber(Model model, @ModelAttribute @Valid NumberSearchRequest request) {
+        log.info("출결번호 검색, 학수번호 : {}", request.getClassNum());
 
-        NumberResponse findNumber = numberService.getNumber(new NumberSearchRequest(classNum));
+        NumberResponse findNumber = numberService.getNumber(new NumberSearchRequest(request.getClassNum()));
         model.addAttribute("findNumber", findNumber);
         log.info("출결번호 검색 성공, 출결번호 : {}", findNumber.getNumber());
 
         return "display_number";
     }
 
-    @GetMapping("/attnumber/retry")
-    public String getNumberRefresh(Model model, @RequestBody @Valid NumberSearchRequest request) {
-        numberService.transactionRefresh();
-        NumberResponse findNumber = numberService.getNumber(request);
-        model.addAttribute("findNumber", findNumber);
-        return "display_number";
-    }
+//    @GetMapping("/attnumber/retry")
+//    public String getNumberRefresh(Model model, @RequestBody @Valid NumberSearchRequest request) {
+//        log.info("출결번호 검색, 학수번호 : {}", request.getClassNum());
+//
+//        numberService.transactionRefresh();
+//        NumberResponse findNumber = numberService.getNumber(request);
+//        model.addAttribute("findNumber", findNumber);
+//        log.info("출결번호 검색 성공, 출결번호 : {}", findNumber.getNumber());
+//
+//        return "display_number";
+//    }
 
     @PostMapping("/attnumber")
-    public String inputNumber(@RequestBody @Valid NumberCreateRequest request) {
+    public String inputNumber(@ModelAttribute @Valid NumberCreateRequest request) {
+        log.info("출결번호 등록, 학수번호 : {} / 출결번호 : {}", request.getClassNum(), request.getNumber());
         numberService.createNumber(request);
         return "main";
     }

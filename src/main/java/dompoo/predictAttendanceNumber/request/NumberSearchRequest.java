@@ -1,6 +1,6 @@
 package dompoo.predictAttendanceNumber.request;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class NumberSearchRequest {
 
-    @NotNull
+    @NotBlank(message = "학수번호는 필수 입력 사항입니다.")
     private String classNum;
 
     public NumberSearchRequest(String classNum) {

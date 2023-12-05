@@ -1,8 +1,11 @@
 package dompoo.predictAttendanceNumber.controller;
 
+import dompoo.predictAttendanceNumber.request.NumberCreateRequest;
+import dompoo.predictAttendanceNumber.request.NumberSearchRequest;
 import dompoo.predictAttendanceNumber.service.NumberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
@@ -22,12 +25,14 @@ public class MainController {
     }
 
     @GetMapping("/getNumber")
-    public String numberGet() {
+    public String numberGet(Model model, NumberSearchRequest request) {
+        model.addAttribute("request", request);
         return "find_number_form";
     }
 
     @GetMapping("/setNumber")
-    public String numberSet() {
+    public String numberSet(Model model, NumberCreateRequest request) {
+        model.addAttribute("reqeust", request);
         return "register_number_form";
     }
 

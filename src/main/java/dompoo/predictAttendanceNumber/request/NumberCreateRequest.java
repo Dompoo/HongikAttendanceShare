@@ -1,7 +1,7 @@
 package dompoo.predictAttendanceNumber.request;
 
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class NumberCreateRequest {
 
-    @Size(max = 9999, min = 0)
+    @Max(value = 9999, message = "출결번호는 4자리 입니다.")
     private int number;
 
     @NotBlank(message = "학수번호는 필수 입력 사항입니다.")

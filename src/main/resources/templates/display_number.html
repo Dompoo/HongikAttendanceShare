@@ -11,20 +11,17 @@
     <table class="table">
         <div>새로고침버튼</div>
 
-<!--        <div th:if="${findNumber.}">-->
         <h1>출결번호 검색 성공</h1>
         <div class="mb-3">
             <label class="form-label">학수번호</label>
             <div th:text="${findNumber.getClassNum()}"></div>
         </div>
+
         <div class="mb-3">
             <label class="form-label">출결번호</label>
             <div th:text="${findNumber.getNumber()}"></div>
         </div>
-<!--        </div>-->
-<!--        <div th:if="${findNumber.isEmpty()}">-->
-<!--            <h1>출결번호 검색 실패</h1>-->
-<!--        </div>-->
+
         <a th:href="@{/}" class="btn btn-primary mx-2">메인으로</a>
     </table>
 </div>
