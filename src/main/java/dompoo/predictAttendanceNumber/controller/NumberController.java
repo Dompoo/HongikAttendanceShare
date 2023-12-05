@@ -23,24 +23,26 @@ public class NumberController {
     public String getNumber(Model model, @ModelAttribute @Valid NumberSearchRequest request) {
         log.info("출결번호 검색, 학수번호 : {}", request.getClassNum());
 
-        NumberResponse findNumber = numberService.getNumber(new NumberSearchRequest(request.getClassNum()));
+        NumberResponse findNumber = numberService.getNumber(request);
         model.addAttribute("findNumber", findNumber);
+        model.addAttribute("classNumber", request.getClassNum());
         log.info("출결번호 검색 성공, 출결번호 : {}", findNumber.getNumber());
 
         return "display_number";
     }
 
-//    @GetMapping("/attnumber/retry")
-//    public String getNumberRefresh(Model model, @RequestBody @Valid NumberSearchRequest request) {
-//        log.info("출결번호 검색, 학수번호 : {}", request.getClassNum());
-//
-//        numberService.transactionRefresh();
-//        NumberResponse findNumber = numberService.getNumber(request);
-//        model.addAttribute("findNumber", findNumber);
-//        log.info("출결번호 검색 성공, 출결번호 : {}", findNumber.getNumber());
-//
-//        return "display_number";
-//    }
+    @PostMapping("/attnumber/retry")
+    public String getNumberRefresh(Model model, @ModelAttribute @Valid NumberSearchRequest request) {
+        log.info("출결번호 검색, 학수번호 : {}", request.getClassNum());
+
+        numberService.transactionRefresh();
+        NumberResponse findNumber = numberService.getNumber(request);
+        model.addAttribute("findNumber", findNumber);
+        model.addAttribute("classNumber", request.getClassNum());
+        log.info("출결번호 검색 성공, 출결번호 : {}", findNumber.getNumber());
+
+        return "display_number";
+    }
 
     @PostMapping("/attnumber")
     public String inputNumber(@ModelAttribute @Valid NumberCreateRequest request) {

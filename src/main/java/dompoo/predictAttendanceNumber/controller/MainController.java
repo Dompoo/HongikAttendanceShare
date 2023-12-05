@@ -32,7 +32,7 @@ public class MainController {
 
     @GetMapping("/setNumber")
     public String numberSet(Model model, NumberCreateRequest request) {
-        model.addAttribute("reqeust", request);
+        model.addAttribute("request", request);
         return "register_number_form";
     }
 
