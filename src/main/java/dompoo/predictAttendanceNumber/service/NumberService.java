@@ -1,6 +1,7 @@
 package dompoo.predictAttendanceNumber.service;
 
 import dompoo.predictAttendanceNumber.domain.Number;
+import dompoo.predictAttendanceNumber.domain.TransactionNumber;
 import dompoo.predictAttendanceNumber.repository.NumberRepository;
 import dompoo.predictAttendanceNumber.repository.TransactionRepository;
 import dompoo.predictAttendanceNumber.request.NumberCreateRequest;
@@ -37,6 +38,9 @@ public class NumberService {
                 .build();
     }
 
+    /**
+     * 이미 등록된 정보인지를 체크한다.
+     */
     public Boolean isPresent(String classNum) {
         // 확정된 레포지토리에 같은 수업의 정보가 있는지 검색
         Optional<Number> findNumber = numberRepository.findByClassNum(classNum);
@@ -44,25 +48,13 @@ public class NumberService {
     }
 
     /**
-     * Number 레포지토리의 값이 틀렸다면 Transaction 레포지토리의 값으로 시도해볼 수 있다.
-     */
-    public List<NumberResponse> getTransactionNumber(NumberSearchRequest request) {
-        // 비확정 레포지토리에 같은 수업의 정보가 있는지 검색
-        List<Number> findNumbers = transactionRepository.findByClassNum(request.getClassNum());
-
-        return findNumbers.stream()
-                .map(NumberResponse::new).toList();
-    }
-
-    /**
      * request의 정보를 받아 Number 객체로
      * Transaction 레포지토리에 저장한다.
      */
     public void createNumber(NumberCreateRequest request) {
-        transactionRepository.save(Number.builder()
+        transactionRepository.save(TransactionNumber.builder()
                 .number(request.getNumber())
                 .classNum(request.getClassNum())
-                .addTime(LocalDateTime.now())
                 .build());
     }
 
@@ -72,14 +64,17 @@ public class NumberService {
      */
     public void transactionRefresh() {
         //TODO 최적화 방법 찾기
-        List<Number> numberList = transactionRepository.findAll();
+        List<TransactionNumber> numberList = transactionRepository.findAll();
 
-        for (Number number : numberList) {
-            for (Number compNumber : numberList) {
+        for (TransactionNumber number : numberList) {
+            for (TransactionNumber compNumber : numberList) {
                 if (number.getNumber() == compNumber.getNumber() &&
                         number.getClassNum().equals(compNumber.getClassNum())) {
                     //동일한 정보가 존재한다는 뜻.
-                    numberRepository.save(number);
+                    numberRepository.save(Number.builder()
+                            .classNum(number.getClassNum())
+                            .number(number.getNumber())
+                            .build());
                     transactionRepository.delete(number);
                     numberList.remove(number);
                 }
