@@ -25,7 +25,6 @@ public class NumberController {
 
         NumberResponse findNumber = numberService.getNumber(request);
         model.addAttribute("findNumber", findNumber);
-        model.addAttribute("classNumber", request.getClassNum());
         log.info("출결번호 검색 성공, 출결번호 : {}", findNumber.getNumber());
 
         return "display_number";
@@ -35,7 +34,7 @@ public class NumberController {
     public String getNumberRefresh(Model model, @ModelAttribute @Valid NumberSearchRequest request) {
         log.info("출결번호 검색, 학수번호 : {}", request.getClassNum());
 
-        numberService.transactionRefresh();
+        numberService.refreshTransaction();
         NumberResponse findNumber = numberService.getNumber(request);
         model.addAttribute("findNumber", findNumber);
         model.addAttribute("classNumber", request.getClassNum());

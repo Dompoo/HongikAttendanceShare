@@ -37,7 +37,7 @@ public class MainController {
     }
 
     @GetMapping("/refresh")
-    public void refreshByUser() {
-        numberService.transactionRefresh();
+    public void refreshTransaction() {
+        numberService.refreshTransaction();
     }
 }

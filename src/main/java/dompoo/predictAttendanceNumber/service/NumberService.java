@@ -62,7 +62,7 @@ public class NumberService {
      * Transaction 레포지토리를 전체 조회하며
      * 중복값이 있는 Number 객체만을 Number 레포지토리에 넣는다.
      */
-    public void transactionRefresh() {
+    public void refreshTransaction() {
         //TODO 최적화 방법 찾기
         List<TransactionNumber> numberList = transactionRepository.findAll();
 
@@ -87,7 +87,7 @@ public class NumberService {
      * 즉, 의미없는 정보를 삭제한다.
      */
     @Scheduled(cron = "0 */30 * * * *") // 30분마다 실행
-    public void numberRefresh() {
+    public void deleteOldNumber() {
         //TODO 최적화 방법 찾기
         List<Number> numberList = numberRepository.findAll();
         //현재 날짜
@@ -109,7 +109,7 @@ public class NumberService {
      */
     @Scheduled(cron = "0 30 * * * *") // 매시간 30분에 실행
     public void emptyTransaction() {
-        transactionRefresh();
+        refreshTransaction();
         transactionRepository.deleteAll();
     }
 }
