@@ -17,17 +17,21 @@ public class NumberResponse {
 
     private String classNum;
 
+    private Boolean isPresent;
+
     @Builder
-    public NumberResponse(Long id, int number, String classNum) {
+    public NumberResponse(Long id, int number, String classNum, Boolean isPresent) {
         this.id = id;
         this.number = number;
         this.classNum = classNum;
+        this.isPresent = isPresent;
     }
 
     public NumberResponse(Number number) {
         this.id = number.getId();
         this.number = number.getNumber();
         this.classNum = number.getClassNum();
+        this.isPresent = true;
     }
 
 }

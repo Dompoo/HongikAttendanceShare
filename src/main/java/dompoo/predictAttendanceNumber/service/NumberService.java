@@ -29,12 +29,13 @@ public class NumberService {
     public NumberResponse getNumber(NumberSearchRequest request) {
         // 확정된 레포지토리에 같은 수업의 정보가 있는지 검색
         Number findNumber = numberRepository.findByClassNum(request.getClassNum())
-                .orElseThrow();
+                .orElseThrow(() -> new RuntimeException("출결번호가 존재하지 않습니다."));
 
         return NumberResponse.builder()
                 .id(findNumber.getId())
                 .number(findNumber.getNumber())
                 .classNum(findNumber.getClassNum())
+                .isPresent(true)
                 .build();
     }
 
