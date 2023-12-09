@@ -1,15 +1,9 @@
-<!--
-메인 화면
-
-출결번호 검색 버튼
-출결번호 등록 버튼
- -->
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="container my-3">
     <table class="table">
         <h5 class="my-3 border-bottom pb-2">출결번호 공유 시스템</h5>
-        <a th:href="@{/getNumber}" class="btn btn-primary my-2">출결번호 검색</a>
-        <a th:href="@{/setNumber}" class="btn btn-primary my-2">출결번호 등록</a>
+        <a th:href="@{/getNumber}" class="btn btn-primary m-2">출결번호 검색</a>
+        <a th:href="@{/setNumber}" class="btn btn-primary m-2">출결번호 등록</a>
     </table>
 </div>
 </html>

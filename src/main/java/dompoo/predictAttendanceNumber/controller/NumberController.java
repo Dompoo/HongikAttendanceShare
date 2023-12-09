@@ -44,7 +44,7 @@ public class NumberController {
         log.info("출결번호 검색, 학수번호 : {}", request.getClassNum());
 
         numberService.refreshTransaction();
-동
+
         try {
             NumberResponse findNumber = numberService.getNumber(request);
             model.addAttribute("findNumber", findNumber);
