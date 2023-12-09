@@ -1,24 +1,17 @@
-<!--
-출결번호 조회 완료후 나오는 화면
-
-출결번호 검색 성공 여부
-성공 -> 출결번호
-실패 -> 새로고침 후 다시 검색하기 버튼
-메인으로 버튼
--->
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="container my-3">
     <table class="table">
-
         <div th:if="${findNumber.isPresent == false}">
-            <form th:action="@{/attnumber/retry}" th:object="${request}" method="post">
-                <input type="text" name="classNum" id="classNum" class="form-control" th:value="${findNumber.getClassNum()}">
-                <input type="submit" value="새로고침 후 재시도" class="btn btn-primary my-2">
+            <h5 class="my-3 border-bottom pb-2">출결번호 검색 실패</h5>
+            <form id="failSubmit" th:action="@{/attnumber/retry}" th:object="${request}" method="post">
+                <input type="hidden" name="classNum" id="classNum" class="form-control" th:value="${findNumber.getClassNum()}">
+                <input type="submit" value="새로고침" class="btn btn-primary m-2">
             </form>
+            <a th:href="@{/}" class="btn btn-primary m-2">메인으로</a>
         </div>
 
         <div th:if="${findNumber.isPresent == true}">
-            <h1>출결번호 검색 성공</h1>
+            <h5 class="my-3 border-bottom pb-2">출결번호 검색 성공</h5>
             <div class="mb-3">
                 <label class="form-label">학수번호</label>
                 <div th:text="${findNumber.getClassNum()}"></div>
@@ -28,14 +21,10 @@
                 <label class="form-label">출결번호</label>
                 <div th:text="${findNumber.getNumber()}"></div>
             </div>
+            <a th:href="@{/}" class="btn btn-primary m-2">메인으로</a>
         </div>
-
-
-
-        <a th:href="@{/}" class="btn btn-primary mx-2">메인으로</a>
     </table>
 </div>
 </html>
-
 
 
