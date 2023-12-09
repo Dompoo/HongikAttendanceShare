@@ -37,10 +37,6 @@ public class PredictAttendanceNumberApplication {
 					.number(5678)
 					.classNum("3")
 					.build());
-			transactionRepository.save(TransactionNumber.builder()
-					.number(5678)
-					.classNum("3")
-					.build());
 		}
 	}
 
