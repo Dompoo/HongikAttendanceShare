@@ -51,12 +51,25 @@ public class NumberService {
     /**
      * request의 정보를 받아 Number 객체로
      * Transaction 레포지토리에 저장한다.
+     * 만약 Transaction 레포지토리에 중복된 정보가 있다면(검증됨),
+     * 해당 정보를 영구 레포지토리로 옮긴다.
      */
     public void createNumber(NumberCreateRequest request) {
-        transactionRepository.save(TransactionNumber.builder()
-                .number(request.getNumber())
-                .classNum(request.getClassNum())
-                .build());
+        Optional<TransactionNumber> findNumber = transactionRepository.findByClassNumAndNumber(request.getClassNum(), request.getNumber());
+        if (findNumber.isEmpty()) {
+            //레포지토리내 중복 없음
+            transactionRepository.save(TransactionNumber.builder()
+                    .number(request.getNumber())
+                    .classNum(request.getClassNum())
+                    .build());
+        } else {
+            //레포지토리에 중복이 있다.
+            transactionRepository.delete(findNumber.get());
+            numberRepository.save(Number.builder()
+                    .classNum(request.getClassNum())
+                    .number(request.getNumber())
+                    .build());
+        }
     }
 
     /**
@@ -69,8 +82,7 @@ public class NumberService {
 
         for (TransactionNumber number : numberList) {
             for (TransactionNumber compNumber : numberList) {
-                if (number.getNumber() == compNumber.getNumber() &&
-                        number.getClassNum().equals(compNumber.getClassNum())) {
+                if (isDuplicated(number, compNumber)) {
                     //동일한 정보가 존재한다는 뜻.
                     numberRepository.save(Number.builder()
                             .classNum(number.getClassNum())
@@ -112,5 +124,11 @@ public class NumberService {
     public void emptyTransaction() {
         refreshTransaction();
         transactionRepository.deleteAll();
+    }
+
+    private static boolean isDuplicated(TransactionNumber number, TransactionNumber compNumber) {
+        return number.getNumber() == compNumber.getNumber()
+                && number.getClassNum().equals(compNumber.getClassNum())
+                && !number.getId().equals(compNumber.getId());
     }
 }
