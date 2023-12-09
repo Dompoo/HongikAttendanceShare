@@ -44,10 +44,20 @@ public class NumberController {
         log.info("출결번호 검색, 학수번호 : {}", request.getClassNum());
 
         numberService.refreshTransaction();
-        NumberResponse findNumber = numberService.getNumber(request);
-        model.addAttribute("findNumber", findNumber);
-        model.addAttribute("classNumber", request.getClassNum());
-        log.info("출결번호 검색 성공, 출결번호 : {}", findNumber.getNumber());
+동
+        try {
+            NumberResponse findNumber = numberService.getNumber(request);
+            model.addAttribute("findNumber", findNumber);
+            model.addAttribute("classNumber", request.getClassNum());
+            log.info("출결번호 검색 성공, 출결번호 : {}", findNumber.getNumber());
+        } catch (RuntimeException e) {
+            NumberResponse findNumber = NumberResponse.builder()
+                    .classNum(request.getClassNum())
+                    .isPresent(false)
+                    .build();
+            log.info("출결번호 검색 실패");
+            model.addAttribute("findNumber", findNumber);
+        }
 
         return "display_number";
     }
