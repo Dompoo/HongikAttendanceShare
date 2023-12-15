@@ -1,13 +1,12 @@
 package dompoo.predictAttendanceNumber.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -23,6 +22,9 @@ public class Member {
     private String password;
 
     private int point;
+
+    @OneToMany(mappedBy = "member")
+    private List<TransactionNumber> numbers;
 
     @Builder
     public Member(String username, String password) {

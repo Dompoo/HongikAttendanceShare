@@ -1,9 +1,6 @@
 package dompoo.predictAttendanceNumber.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,9 +19,20 @@ public class TransactionNumber {
 
     private String classNum;
 
+    @ManyToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn
+    private Member member;
+
     @Builder
-    public TransactionNumber(int number, String classNum) {
+    public TransactionNumber(int number, String classNum, Member member) {
         this.number = number;
         this.classNum = classNum;
+        setMember(member);
+    }
+
+    //연관관계 편의 메서드
+    public void setMember(Member member) {
+        this.member = member;
+        member.getNumbers().add(this);
     }
 }
