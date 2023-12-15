@@ -3,5 +3,9 @@ package dompoo.predictAttendanceNumber.repository;
 import dompoo.predictAttendanceNumber.domain.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<Member, Long> {
+import java.util.Optional;
+
+public interface MemberRepository extends JpaRepository<Member, Long> {
+
+    Optional<Member> findByUsername(String username);
 }

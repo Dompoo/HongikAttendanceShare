@@ -1,7 +1,9 @@
 package dompoo.predictAttendanceNumber.service;
 
+import dompoo.predictAttendanceNumber.domain.Member;
 import dompoo.predictAttendanceNumber.domain.Number;
 import dompoo.predictAttendanceNumber.domain.TransactionNumber;
+import dompoo.predictAttendanceNumber.repository.MemberRepository;
 import dompoo.predictAttendanceNumber.repository.NumberRepository;
 import dompoo.predictAttendanceNumber.repository.TransactionRepository;
 import dompoo.predictAttendanceNumber.request.NumberCreateRequest;
@@ -11,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -21,6 +24,7 @@ import java.util.Optional;
 public class NumberService {
 
     private final NumberRepository numberRepository;
+    private final MemberRepository memberRepository;
     private final TransactionRepository transactionRepository;
 
     /**
@@ -54,17 +58,26 @@ public class NumberService {
      * 만약 Transaction 레포지토리에 중복된 정보가 있다면(검증됨),
      * 해당 정보를 영구 레포지토리로 옮긴다.
      */
-    public void createNumber(NumberCreateRequest request) {
+    public void createNumber(NumberCreateRequest request, Principal principal) {
         Optional<TransactionNumber> findNumber = transactionRepository.findByClassNumAndNumber(request.getClassNum(), request.getNumber());
+        Member loginMember = memberRepository.findByUsername(principal.getName()).orElseThrow();
+
         if (findNumber.isEmpty()) {
             //레포지토리내 중복 없음
             transactionRepository.save(TransactionNumber.builder()
                     .number(request.getNumber())
                     .classNum(request.getClassNum())
+                    .member(loginMember)
                     .build());
         } else {
             //레포지토리에 중복이 있다.
-            transactionRepository.delete(findNumber.get());
+            //찾은 멤버가 기존 멤버와 같은지 체크, 같다면 중복이 있으므로 pop
+            TransactionNumber transactionNumber = findNumber.get();
+            if (transactionNumber.getMember().getUsername().equals(principal.getName())) {
+                return;
+            }
+
+            transactionRepository.delete(transactionNumber);
             numberRepository.save(Number.builder()
                     .classNum(request.getClassNum())
                     .number(request.getNumber())

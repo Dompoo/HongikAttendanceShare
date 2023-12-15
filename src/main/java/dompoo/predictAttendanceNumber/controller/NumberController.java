@@ -12,6 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.security.Principal;
+
 @Controller
 @RequiredArgsConstructor
 @Slf4j
@@ -63,9 +65,9 @@ public class NumberController {
     }
 
     @PostMapping("/attnumber")
-    public String inputNumber(@ModelAttribute @Valid NumberCreateRequest request) {
+    public String inputNumber(@ModelAttribute @Valid NumberCreateRequest request, Principal principal) {
         log.info("출결번호 등록, 학수번호 : {} / 출결번호 : {}", request.getClassNum(), request.getNumber());
-        numberService.createNumber(request);
+        numberService.createNumber(request, principal);
         return "main";
     }
 }
