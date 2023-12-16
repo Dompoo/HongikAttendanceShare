@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -24,12 +25,12 @@ public class Member {
     private int point;
 
     @OneToMany(mappedBy = "member")
-    private List<TransactionNumber> numbers;
+    private List<TransactionNumber> numbers = new ArrayList<>();
 
     @Builder
     public Member(String username, String password) {
         this.username = username;
         this.password = password;
-        point = 5;
+        this.point = 5;
     }
 }
