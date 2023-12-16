@@ -1,7 +1,9 @@
 package dompoo.predictAttendanceNumber;
 
+import dompoo.predictAttendanceNumber.domain.Member;
 import dompoo.predictAttendanceNumber.domain.Number;
 import dompoo.predictAttendanceNumber.domain.TransactionNumber;
+import dompoo.predictAttendanceNumber.repository.MemberRepository;
 import dompoo.predictAttendanceNumber.repository.NumberRepository;
 import dompoo.predictAttendanceNumber.repository.TransactionRepository;
 import jakarta.annotation.PostConstruct;
@@ -19,12 +21,18 @@ public class PredictAttendanceNumberApplication {
 
 	@Configuration
 	@RequiredArgsConstructor
-	public class testDataInit {
+	public static class testDataInit {
 		private final NumberRepository numberRepository;
 		private final TransactionRepository transactionRepository;
+		private final MemberRepository memberRepository;
 
 		@PostConstruct
 		public void init() {
+			Member member = memberRepository.save(Member.builder()
+					.username("test")
+					.password("1234")
+					.build());
+
 			numberRepository.save(Number.builder()
 					.number(1234)
 					.classNum("1")
@@ -33,9 +41,11 @@ public class PredictAttendanceNumberApplication {
 					.number(5678)
 					.classNum("2")
 					.build());
+
 			transactionRepository.save(TransactionNumber.builder()
 					.number(5678)
 					.classNum("3")
+					.member(member)
 					.build());
 		}
 	}
