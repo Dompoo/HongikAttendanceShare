@@ -1,25 +1,25 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="container my-3">
     <table class="table">
-        <div th:if="${findNumber.isPresent == false}">
+        <div th:if="${numberResponse.isPresent == false}">
             <h5 class="my-3 border-bottom pb-2">출결번호 검색 실패</h5>
-            <form id="failSubmit" th:action="@{/attnumber/retry}" th:object="${request}" method="post">
-                <input type="hidden" name="classNum" id="classNum" class="form-control" th:value="${findNumber.getClassNum()}">
+            <form id="failSubmit" th:action="@{/attnumber/retry}" th:object="${numberResponse}" method="post">
+                <input type="hidden" name="classNum" id="classNum" class="form-control" th:value="${numberResponse.getClassNum()}">
                 <input type="submit" value="새로고침" class="btn btn-primary m-2">
             </form>
             <a th:href="@{/}" class="btn btn-primary m-2">메인으로</a>
         </div>
 
-        <div th:if="${findNumber.isPresent == true}">
+        <div th:if="${numberResponse.isPresent == true}">
             <h5 class="my-3 border-bottom pb-2">출결번호 검색 성공</h5>
             <div class="mb-3">
                 <label class="form-label">학수번호</label>
-                <div th:text="${findNumber.getClassNum()}"></div>
+                <div th:text="${numberResponse.getClassNum()}"></div>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">출결번호</label>
-                <div th:text="${findNumber.getNumber()}"></div>
+                <div th:text="${numberResponse.getNumber()}"></div>
             </div>
             <a th:href="@{/}" class="btn btn-primary m-2">메인으로</a>
         </div>
