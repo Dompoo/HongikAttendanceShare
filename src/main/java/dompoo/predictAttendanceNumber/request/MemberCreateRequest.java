@@ -17,6 +17,9 @@ public class MemberCreateRequest {
     @NotBlank(message = "비밀번호는 필수 입력 사항입니다.")
     private String password;
 
+    @NotBlank(message = "확인비밀번호는 필수 입력 사항입니다.")
+    private String checkPassword;
+
     @Builder
     public MemberCreateRequest(String username, String password) {
         this.username = username;
