@@ -3,6 +3,7 @@
     <table class="table">
         <h5 class="my-3 border-bottom pb-2">출결번호 검색</h5>
         <form th:action="@{/attnumber/find}" th:object="${request}" method="post">
+            <div th:replace="~{form_errors :: formErrorsFragment}"></div>
             <div class="mb-3">
                 <label for="classNum" class="form-label">학수번호</label>
                 <input type="text" name="classNum" id="classNum" class="form-control">
