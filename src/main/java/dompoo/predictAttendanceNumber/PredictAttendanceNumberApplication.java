@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
 public class PredictAttendanceNumberApplication {
@@ -25,12 +26,13 @@ public class PredictAttendanceNumberApplication {
 		private final NumberRepository numberRepository;
 		private final TransactionRepository transactionRepository;
 		private final MemberRepository memberRepository;
+		private final PasswordEncoder encoder;
 
 		@PostConstruct
 		public void init() {
 			Member member = memberRepository.save(Member.builder()
 					.username("test")
-					.password("1234")
+					.password(encoder.encode("1234"))
 					.build());
 
 			numberRepository.save(Number.builder()
