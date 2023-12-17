@@ -71,7 +71,8 @@ public class NumberService {
                     .build());
         } else {
             //레포지토리에 중복이 있다.
-            //찾은 멤버가 기존 멤버와 같은지 체크, 같다면 중복이 있으므로 pop
+            //중복 멤버가 현재 멤버와 같은지 체크, 같다면 중복 저장이므로 return
+            //같지 않다면 영구레포지토리로 이동
             TransactionNumber transactionNumber = findNumber.get();
             if (transactionNumber.getMember().getUsername().equals(principal.getName())) {
                 return;
