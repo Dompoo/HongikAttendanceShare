@@ -8,8 +8,11 @@ import dompoo.predictAttendanceNumber.repository.NumberRepository;
 import dompoo.predictAttendanceNumber.repository.TransactionRepository;
 import dompoo.predictAttendanceNumber.request.NumberCreateRequest;
 import dompoo.predictAttendanceNumber.request.NumberSearchRequest;
+import dompoo.predictAttendanceNumber.response.NumberFindFailResponse;
 import dompoo.predictAttendanceNumber.response.NumberFindSuccessResponse;
+import dompoo.predictAttendanceNumber.response.NumberResponse;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,9 +29,19 @@ public class NumberService {
     /**
      * Number 레포지토리에서 원하는 출결번호가 있는지 찾고 리턴한다. (확정정보)
      */
-    public Optional<NumberFindSuccessResponse> getNumber(NumberSearchRequest request) {
-        return numberRepository.findByClassNum(request.getClassNum())
-                .map(NumberFindSuccessResponse::new);
+    @Transactional
+    public NumberResponse getNumber(NumberSearchRequest request, String username) {
+        Optional<Number> findNumber = numberRepository.findByClassNum(request.getClassNum());
+
+        //찾는 출결번호가 있으면 현재 로그인된 사용자의 포인트를 -1한다.
+        if (findNumber.isPresent()) {
+            Member loginMember = memberRepository.findByUsername(username)
+                    .orElseThrow(EntityNotFoundException::new);
+            loginMember.addPoint(-1);
+            return new NumberFindSuccessResponse(findNumber.get());
+        }
+        //찾는 출결번호가 없으면 그냥 리턴한다.
+        return new NumberFindFailResponse(request.getClassNum());
     }
 
     /**

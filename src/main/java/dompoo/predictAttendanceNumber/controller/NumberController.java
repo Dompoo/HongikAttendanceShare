@@ -2,9 +2,10 @@ package dompoo.predictAttendanceNumber.controller;
 
 import dompoo.predictAttendanceNumber.request.NumberCreateRequest;
 import dompoo.predictAttendanceNumber.request.NumberSearchRequest;
-import dompoo.predictAttendanceNumber.response.NumberFindSuccessResponse;
+import dompoo.predictAttendanceNumber.response.NumberFindFailResponse;
+import dompoo.predictAttendanceNumber.response.NumberResponse;
+import dompoo.predictAttendanceNumber.service.MemberService;
 import dompoo.predictAttendanceNumber.service.NumberService;
-import dompoo.predictAttendanceNumber.service.TransactionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
-import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -27,7 +27,7 @@ import java.util.Optional;
 public class NumberController {
 
     private final NumberService numberService;
-    private final TransactionService transactionService;
+    private final MemberService memberService;
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/find")
@@ -38,19 +38,19 @@ public class NumberController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/find")
-    public String findNumber(Model model, @ModelAttribute @Valid NumberSearchRequest request, BindingResult bindingResult) {
+    public String findNumber(Model model, @ModelAttribute @Valid NumberSearchRequest request, BindingResult bindingResult, Principal principal) {
         if (bindingResult.hasErrors()) {
             return "find_number_form";
         }
 
-        Optional<NumberFindSuccessResponse> findNumber = numberService.getNumber(request);
+        NumberResponse findNumber = numberService.getNumber(request, principal.getName());
 
-        if (findNumber.isEmpty()) {
+        if (findNumber.getClass().isInstance(NumberFindFailResponse.class)) {
             model.addAttribute("classNumber", request.getClassNum());
             return "display_number_fail";
         }
 
-        model.addAttribute("numberResponse", findNumber.get());
+        model.addAttribute("numberResponse", findNumber);
 
         return "display_number";
     }
