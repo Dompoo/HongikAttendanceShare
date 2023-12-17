@@ -26,13 +26,13 @@ public class MainController {
 
     @GetMapping("/getNumber")
     public String numberGet(Model model, NumberSearchRequest request) {
-        model.addAttribute("request", request);
+        model.addAttribute("numberSearchReqeust", request);
         return "find_number_form";
     }
 
     @GetMapping("/setNumber")
     public String numberSet(Model model, NumberCreateRequest request) {
-        model.addAttribute("request", request);
+        model.addAttribute("numberCreateRequest", request);
         return "register_number_form";
     }
 

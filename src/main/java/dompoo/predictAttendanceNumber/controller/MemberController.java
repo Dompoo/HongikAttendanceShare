@@ -5,8 +5,10 @@ import dompoo.predictAttendanceNumber.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
@@ -15,19 +17,20 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    @GetMapping("/signup")
-    public String signup(MemberCreateRequest request) {
+    @GetMapping("/member/signup")
+    public String signup(Model model, MemberCreateRequest request) {
+        model.addAttribute("memberCreateRequest", request);
         return "signup_form";
     }
 
-    @PostMapping("/signup")
-    public String signup(@Valid MemberCreateRequest request, BindingResult bindingResult) {
+    @PostMapping("/member/signup")
+    public String signup(@ModelAttribute @Valid MemberCreateRequest request, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "signup_form";
         }
 
-        if (!request.getPassword().equals(request.getCheckPassword())) {
-            bindingResult.rejectValue("passwordCheck", "passwordCheckFail", "패스워드가 일치하지 않습니다.");
+        if (!request.getPassword().equals(request.getPassword2())) {
+            bindingResult.rejectValue("password2", "passwordCheckFail", "패스워드가 일치하지 않습니다.");
             return "signup_form";
         }
 
