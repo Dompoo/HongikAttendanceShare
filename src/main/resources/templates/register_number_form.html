@@ -1,20 +1,22 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="container my-3">
-    <table class="table">
-        <h5 class="my-3 border-bottom pb-2">출결번호 등록</h5>
-        <form th:action="@{/attnumber/register}" th:object="${numberCreateRequest}" method="post">
-            <div th:replace="~{form_errors :: formErrorsFragment}"></div>
-            <div class="mb-3">
-                <label for="classNum" class="form-label">학수번호</label>
-                <input type="text" name="classNum" th:field="*{classNum}" id="classNum" class="form-control">
-            </div>
-            <div class="mb-3">
-                <label for="number" class="form-label">출결번호</label>
-                <input type="text" name="number" th:field="*{number}" id="number" class="form-control">
-            </div>
-            <input type="submit" value="등록하기" class="btn btn-primary m-2">
-        </form>
-        <a th:href="@{/}" class="btn btn-primary m-2">메인으로</a>
-    </table>
+    <div class="my-3 border-bottom">
+        <div>
+            <h4>출결번호 등록</h4>
+        </div>
+    </div>
+    <form th:action="@{/attnumber/register}" th:object="${numberCreateRequest}" method="post">
+        <div th:replace="~{form_errors :: formErrorsFragment}"></div>
+        <div class="mb-3">
+            <label for="classNum" class="form-label">학수번호</label>
+            <input type="text" name="classNum" th:field="*{classNum}" id="classNum" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="number" class="form-label">출결번호</label>
+            <input type="text" name="number" th:field="*{number}" id="number" class="form-control">
+        </div>
+        <input type="submit" value="등록하기" class="btn btn-primary m-2">
+    </form>
+    <a th:href="@{/}" class="btn btn-primary m-2">메인으로</a>
 </div>
 </html>

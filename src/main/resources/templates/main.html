@@ -1,9 +1,11 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="container my-3">
-    <table class="table">
-        <h5 class="my-3 border-bottom pb-2">출결번호 공유 시스템</h5>
-        <a th:href="@{/attnumber/find}" class="btn btn-primary m-2">출결번호 검색</a>
-        <a th:href="@{/attnumber/register}" class="btn btn-primary m-2">출결번호 등록</a>
-    </table>
+    <div class="my-3 border-bottom">
+        <div>
+            <h4>메인</h4>
+        </div>
+    </div>
+    <a th:href="@{/attnumber/find}" class="btn btn-primary m-2">출결번호 검색</a>
+    <a th:href="@{/attnumber/register}" class="btn btn-primary m-2">출결번호 등록</a>
 </div>
 </html>

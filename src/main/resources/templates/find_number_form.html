@@ -1,7 +1,11 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="container my-3">
+    <div class="my-3 border-bottom">
+        <div>
+            <h4>출결번호 검색</h4>
+        </div>
+    </div>
     <table class="table">
-        <h5 class="my-3 border-bottom pb-2">출결번호 검색</h5>
         <form th:action="@{/attnumber/find}" th:object="${numberSearchRequest}" method="post">
             <div th:replace="~{form_errors :: formErrorsFragment}"></div>
             <div class="mb-3">
