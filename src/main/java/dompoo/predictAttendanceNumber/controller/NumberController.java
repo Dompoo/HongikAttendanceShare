@@ -2,9 +2,9 @@ package dompoo.predictAttendanceNumber.controller;
 
 import dompoo.predictAttendanceNumber.request.NumberCreateRequest;
 import dompoo.predictAttendanceNumber.request.NumberSearchRequest;
-import dompoo.predictAttendanceNumber.response.NumberResponse;
+import dompoo.predictAttendanceNumber.response.NumberFindSuccessResponse;
 import dompoo.predictAttendanceNumber.service.NumberService;
-import jakarta.persistence.EntityNotFoundException;
+import dompoo.predictAttendanceNumber.service.TransactionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -26,6 +27,7 @@ import java.security.Principal;
 public class NumberController {
 
     private final NumberService numberService;
+    private final TransactionService transactionService;
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/find")
@@ -41,40 +43,14 @@ public class NumberController {
             return "find_number_form";
         }
 
-        try {
-            NumberResponse numberResponse = numberService.getNumber(request);
-            model.addAttribute("numberResponse", numberResponse);
-        } catch (EntityNotFoundException e) {
-            NumberResponse numberResponse = NumberResponse.builder()
-                    .classNum(request.getClassNum())
-                    .isPresent(false)
-                    .build();
-            model.addAttribute("numberResponse", numberResponse);
-        }
+        Optional<NumberFindSuccessResponse> findNumber = numberService.getNumber(request);
 
-        return "display_number";
-    }
-
-    @PreAuthorize("isAuthenticated()")
-    @PostMapping("/retry")
-    public String getNumberRefresh(Model model, @ModelAttribute @Valid NumberSearchRequest request, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "find_number_form";
-        }
-
-        numberService.refreshTransaction();
-
-        try {
-            NumberResponse numberResponse = numberService.getNumber(request);
-            model.addAttribute("numberResponse", numberResponse);
+        if (findNumber.isEmpty()) {
             model.addAttribute("classNumber", request.getClassNum());
-        } catch (RuntimeException e) {
-            NumberResponse numberResponse = NumberResponse.builder()
-                    .classNum(request.getClassNum())
-                    .isPresent(false)
-                    .build();
-            model.addAttribute("numberResponse", numberResponse);
+            return "display_number_fail";
         }
+
+        model.addAttribute("numberResponse", findNumber.get());
 
         return "display_number";
     }

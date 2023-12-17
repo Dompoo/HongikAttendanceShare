@@ -1,0 +1,16 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">
+    <div class="my-3 border-bottom">
+        <div>
+            <h4>출결번호 검색 실패</h4>
+        </div>
+    </div>
+    <form id="failSubmit" th:action="@{/attnumber/find}" th:object="${numberResponse}" method="post">
+        <input type="hidden" name="classNum" id="classNum" class="form-control" th:value="${classNumber}">
+        <input type="submit" value="새로고침" class="btn btn-primary m-2">
+        <a th:href="@{/}" class="btn btn-primary m-2">메인으로</a>
+    </form>
+</div>
+</html>
+
+

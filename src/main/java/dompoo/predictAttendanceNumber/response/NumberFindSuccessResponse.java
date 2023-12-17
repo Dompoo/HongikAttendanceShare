@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class NumberResponse {
+public class NumberFindSuccessResponse {
 
     private Long id;
 
@@ -17,21 +17,17 @@ public class NumberResponse {
 
     private String classNum;
 
-    private Boolean isPresent;
-
     @Builder
-    public NumberResponse(Long id, int number, String classNum, Boolean isPresent) {
+    public NumberFindSuccessResponse(Long id, int number, String classNum) {
         this.id = id;
         this.number = number;
         this.classNum = classNum;
-        this.isPresent = isPresent;
     }
 
-    public NumberResponse(Number number) {
+    public NumberFindSuccessResponse(Number number) {
         this.id = number.getId();
         this.number = number.getNumber();
         this.classNum = number.getClassNum();
-        this.isPresent = true;
     }
 
 }
