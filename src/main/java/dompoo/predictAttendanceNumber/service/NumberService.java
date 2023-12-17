@@ -9,11 +9,11 @@ import dompoo.predictAttendanceNumber.repository.TransactionRepository;
 import dompoo.predictAttendanceNumber.request.NumberCreateRequest;
 import dompoo.predictAttendanceNumber.request.NumberSearchRequest;
 import dompoo.predictAttendanceNumber.response.NumberResponse;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -33,7 +33,7 @@ public class NumberService {
     public NumberResponse getNumber(NumberSearchRequest request) {
         // 확정된 레포지토리에 같은 수업의 정보가 있는지 검색
         Number findNumber = numberRepository.findByClassNum(request.getClassNum())
-                .orElseThrow(() -> new RuntimeException("출결번호가 존재하지 않습니다."));
+                .orElseThrow(() -> new EntityNotFoundException("출결번호가 존재하지 않습니다."));
 
         return NumberResponse.builder()
                 .id(findNumber.getId())
@@ -58,9 +58,9 @@ public class NumberService {
      * 만약 Transaction 레포지토리에 중복된 정보가 있다면(검증됨),
      * 해당 정보를 영구 레포지토리로 옮긴다.
      */
-    public void createNumber(NumberCreateRequest request, Principal principal) {
+    public void createNumber(NumberCreateRequest request, String loginUserName) {
         Optional<TransactionNumber> findNumber = transactionRepository.findByClassNumAndNumber(request.getClassNum(), request.getNumber());
-        Member loginMember = memberRepository.findByUsername(principal.getName()).orElseThrow();
+        Member loginMember = memberRepository.findByUsername(loginUserName).orElseThrow();
 
         if (findNumber.isEmpty()) {
             //레포지토리내 중복 없음
@@ -74,7 +74,7 @@ public class NumberService {
             //중복 멤버가 현재 멤버와 같은지 체크, 같다면 중복 저장이므로 return
             //같지 않다면 영구레포지토리로 이동
             TransactionNumber transactionNumber = findNumber.get();
-            if (transactionNumber.getMember().getUsername().equals(principal.getName())) {
+            if (transactionNumber.getMember().getUsername().equals(loginUserName)) {
                 return;
             }
 
