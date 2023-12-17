@@ -66,10 +66,10 @@ public class NumberService {
             //같지 않다면 valid한 정보 -> 작성자의 포인트 추가 후 영구레포지토리로 이동
             memberRepository.findByUsername(savedUsername)
                     .orElseThrow(EntityNotFoundException::new)
-                    .addPoint(1);
+                    .addPoint(3);
             memberRepository.findByUsername(loginUsername)
                     .orElseThrow(EntityNotFoundException::new)
-                    .addPoint(1);
+                    .addPoint(3);
 
             transactionRepository.delete(transactionNumber);
             numberRepository.save(Number.builder()
