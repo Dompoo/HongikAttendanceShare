@@ -33,4 +33,8 @@ public class Member {
         this.password = password;
         this.point = 5;
     }
+
+    public void addPoint(int point) {
+        this.point += point;
+    }
 }
