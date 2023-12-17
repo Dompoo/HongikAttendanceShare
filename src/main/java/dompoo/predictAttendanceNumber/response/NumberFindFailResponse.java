@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class NumberFindFailResponse {
+public class NumberFindFailResponse implements NumberResponse {
 
     private String classNum;
 

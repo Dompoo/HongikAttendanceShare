@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class NumberFindSuccessResponse {
+public class NumberFindSuccessResponse implements NumberResponse {
 
     private Long id;
 
