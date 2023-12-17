@@ -4,6 +4,7 @@ import dompoo.predictAttendanceNumber.domain.Member;
 import dompoo.predictAttendanceNumber.repository.MemberRepository;
 import dompoo.predictAttendanceNumber.request.MemberCreateRequest;
 import dompoo.predictAttendanceNumber.response.MemberResponse;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,5 +23,11 @@ public class MemberService {
                 .build()
         );
         return new MemberResponse(savedMember);
+    }
+
+    public boolean hasEnoughPoint(String username) {
+        Member loginMember = memberRepository.findByUsername(username)
+                .orElseThrow(EntityNotFoundException::new);
+        return loginMember.getPoint() > 0;
     }
 }

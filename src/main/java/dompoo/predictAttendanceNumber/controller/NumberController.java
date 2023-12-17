@@ -43,6 +43,11 @@ public class NumberController {
             return "find_number_form";
         }
 
+        if (!memberService.hasEnoughPoint(principal.getName())) {
+            bindingResult.rejectValue("classNum", "notEnoughPoint", "검색할 포인트가 충분하지 않습니다.");
+            return "find_number_form";
+        }
+
         NumberResponse findNumber = numberService.getNumber(request, principal.getName());
 
         if (findNumber.getClass().isInstance(NumberFindFailResponse.class)) {
