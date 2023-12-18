@@ -1,0 +1,24 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">
+    <div class="my-3 border-bottom">
+        <div>
+            <h4>내 정보</h4>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">유저명</label>
+        <div th:text="${memberResponse.username}"></div>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">비밀번호</label>
+        <div th:text="${memberResponse.password}"></div>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">포인트</label>
+        <div th:text="${memberResponse.point}"></div>
+    </div>
+    <a th:href="@{/}" class="btn btn-primary m-2">메인으로</a>
+</div>
+</html>
+
+

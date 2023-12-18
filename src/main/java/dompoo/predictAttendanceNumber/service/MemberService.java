@@ -16,13 +16,18 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder encoder;
 
-    public MemberResponse registerMember(MemberCreateRequest request) {
-        Member savedMember = memberRepository.save(Member.builder()
+    public void registerMember(MemberCreateRequest request) {
+        memberRepository.save(Member.builder()
                 .username(request.getUsername())
                 .password(encoder.encode(request.getPassword()))
                 .build()
         );
-        return new MemberResponse(savedMember);
+    }
+
+    public MemberResponse getMemberInfo(String username) {
+        Member loginMember = memberRepository.findByUsername(username)
+                .orElseThrow(EntityNotFoundException::new);
+        return new MemberResponse(loginMember);
     }
 
     public boolean hasEnoughPoint(String username) {

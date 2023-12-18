@@ -8,7 +8,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link disabled" sec:authorize="isAuthenticated()" th:text="${#authentication.name}"></a>
+                    <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/member/info}" th:text="${#authentication.name}"></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/member/login}">로그인</a>

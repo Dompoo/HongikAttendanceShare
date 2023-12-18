@@ -1,6 +1,7 @@
 package dompoo.predictAttendanceNumber.controller;
 
 import dompoo.predictAttendanceNumber.request.MemberCreateRequest;
+import dompoo.predictAttendanceNumber.response.MemberResponse;
 import dompoo.predictAttendanceNumber.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -10,20 +11,24 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.security.Principal;
 
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/member")
 public class MemberController {
 
     private final MemberService memberService;
 
-    @GetMapping("/member/signup")
+    @GetMapping("/signup")
     public String signup(Model model, MemberCreateRequest request) {
         model.addAttribute("memberCreateRequest", request);
         return "signup_form";
     }
 
-    @PostMapping("/member/signup")
+    @PostMapping("/signup")
     public String signup(@ModelAttribute @Valid MemberCreateRequest request, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "signup_form";
@@ -39,8 +44,15 @@ public class MemberController {
         return "redirect:/";
     }
 
-    @GetMapping("/member/login")
+    @GetMapping("/login")
     public String login() {
         return "login_form";
+    }
+
+    @GetMapping("/info")
+    public String info(Model model, Principal principal) {
+        MemberResponse memberResponse = memberService.getMemberInfo(principal.getName());
+        model.addAttribute("memberResponse", memberResponse);
+        return "member_info";
     }
 }
