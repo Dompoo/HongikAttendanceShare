@@ -14,8 +14,8 @@
 * 영구 레포지토리로 이동 시 포인트 2 추가
 
 ## TODO
-* MEMBER 관련 기능 추가
-* 기존 Number 검색, 등록 기능에 포인트 정보 추가
-* Number 검색 기능에 같은 사람이 같은 내용을 등록하지 못하도록 수정
-* 포인트 정책 확립
-* TransactionNumber - Member 연관관계 매핑
+* ~~MEMBER 관련 기능 추가~~
+* ~~TransactionNumber - Member 연관관계 매핑~~
+* ~~Number 등록 기능에 같은 사람이 같은 내용을 등록하지 못하도록 수정~~
+* ~~기존 Number 검색, 등록 기능에 포인트 정보 추가~~
+* ~~포인트 정책 확립~~
